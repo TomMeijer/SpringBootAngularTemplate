@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,13 +30,16 @@ import java.util.List;
 public class WebSecurityConfig {
     private final UserDetailsService userDetailsService;
     private final AuthTokenFilter authTokenFilter;
+    private final PasswordEncoder passwordEncoder;
     private final List<String> allowedOrigins;
 
     public WebSecurityConfig(UserDetailsService userDetailsService,
                              AuthTokenFilter authTokenFilter,
+                             PasswordEncoder passwordEncoder,
                              @Value("${app.config.cors.allowed-origins}") List<String> allowedOrigins) {
         this.userDetailsService = userDetailsService;
         this.authTokenFilter = authTokenFilter;
+        this.passwordEncoder = passwordEncoder;
         this.allowedOrigins = allowedOrigins;
     }
 
@@ -67,16 +69,11 @@ public class WebSecurityConfig {
         return source;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
     @Autowired
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Bean
