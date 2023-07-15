@@ -23,6 +23,5 @@
     <packaging>pom</packaging>
     <modules>
         <module>backend</module>
-        <module>web</module>
     </modules>
 </project>
