@@ -1,0 +1,56 @@
+package com.myapp.domain.user;
+
+import com.myapp.domain.user.entity.User;
+import com.myapp.domain.user.model.dto.RegisterUserDto;
+import com.myapp.domain.user.model.dto.UserDto;
+import com.myapp.domain.user.model.params.RegisterUserParams;
+import com.myapp.domain.user.model.params.UpdateUserParams;
+import com.myapp.security.TokenService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
+
+    @Transactional
+    public RegisterUserDto register(RegisterUserParams params) {
+        Optional<User> optionalUser = userRepository.findByEmail(params.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new IllegalArgumentException("An account with this email address already exists");
+        }
+        var user = new User();
+        user.setEmail(params.getEmail());
+        user.setPassword(passwordEncoder.encode(params.getPassword()));
+        user = userRepository.save(user);
+
+        String token = tokenService.create(user.getEmail());
+        return new RegisterUserDto(token);
+    }
+
+    public UserDto get(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return new UserDto(user);
+    }
+
+    @Transactional
+    public void update(UpdateUserParams params) {
+        User user = userRepository.findById(params.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setFirstName(params.getFirstName());
+        user.setLastName(params.getLastName());
+        userRepository.save(user);
+    }
+
+    public void delete(int id) {
+        userRepository.deleteById(id);
+    }
+}
