@@ -12,7 +12,12 @@
       </ul>
       <ul *ngIf="user" class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{user.firstName ? user.firstName : 'User'}}</a>
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+            <div class="profile-pic-container me-2">
+              <img [src]="profilePicSrc" class="rounded-circle" alt="">
+            </div>
+            <span>{{user.firstName ? user.firstName : 'User'}}</span>
+          </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item cursor-pointer" (click)="showProfile()">Profile</a></li>
             <li><hr class="dropdown-divider"/></li>

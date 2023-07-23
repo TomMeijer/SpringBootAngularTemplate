@@ -22,6 +22,14 @@ export class NavbarComponent implements OnInit {
     this.userService.user$.subscribe(user => this.user = user);
   }
 
+  get profilePicSrc(): string {
+    if (this.user.profilePic) {
+      return `data:${this.user.profilePic.type};base64,${this.user.profilePic.content}`;
+    } else {
+      return 'assets/img/default_profile.png';
+    }
+  }
+
   public showProfile(): void {
     this.modalService.show(ProfileComponent);
   }
