@@ -20,7 +20,12 @@ public class UserController {
 
     @PostMapping
     public RegisterUserDto register(@RequestBody @Valid RegisterUserRequest request) {
-        return userService.register(new RegisterUserParams(request.getEmail(), request.getPassword()));
+        return userService.register(new RegisterUserParams(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword()
+        ));
     }
 
     @GetMapping
@@ -33,7 +38,8 @@ public class UserController {
         userService.update(new UpdateUserParams(
                 principal.getUser().getId(),
                 request.getFirstName(),
-                request.getLastName()
+                request.getLastName(),
+                request.getProfilePic()
         ));
     }
 

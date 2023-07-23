@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/auth", "/user").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth", "/user").permitAll().requestMatchers("/error").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

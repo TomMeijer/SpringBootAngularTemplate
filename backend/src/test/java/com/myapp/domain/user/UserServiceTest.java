@@ -1,6 +1,7 @@
 package com.myapp.domain.user;
 
 import com.myapp.domain.user.entity.User;
+import com.myapp.domain.user.exception.EmailAlreadyExistsException;
 import com.myapp.domain.user.model.params.RegisterUserParams;
 import com.myapp.domain.user.model.params.UpdateUserParams;
 import com.myapp.security.TokenService;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -39,7 +42,7 @@ class UserServiceTest {
 
     @Test
     void register_user_save() {
-        var params = new RegisterUserParams("email", "password");
+        var params = new RegisterUserParams("john", "doe", "email", "password");
 
         var encodedPassword = "ABC123";
         when(passwordEncoder.encode(params.getPassword())).thenReturn(encodedPassword);
@@ -47,6 +50,8 @@ class UserServiceTest {
         var savedUser = new User();
         savedUser.setEmail("email");
         when(userRepository.save(argThat(allOf(
+                hasProperty("firstName", is(params.getFirstName())),
+                hasProperty("lastName", is(params.getLastName())),
                 hasProperty("email", is(params.getEmail())),
                 hasProperty("password", is(encodedPassword))
         )))).thenReturn(savedUser);
@@ -60,12 +65,12 @@ class UserServiceTest {
 
     @Test
     void register_existingEmail_throwException() {
-        var params = new RegisterUserParams("email", "password");
+        var params = new RegisterUserParams("john", "doe", "email", "password");
         when(userRepository.findByEmail(params.getEmail())).thenReturn(Optional.of(new User()));
         assertThrows(
-                IllegalArgumentException.class,
+                EmailAlreadyExistsException.class,
                 () -> userService.register(params),
-                "An account with this email address already exists"
+                "A user with email address '%s' already exists".formatted(params.getEmail())
         );
     }
 
@@ -90,15 +95,25 @@ class UserServiceTest {
     }
 
     @Test
-    void update_user_save() {
-        var params = new UpdateUserParams(1, "john", "doe");
+    void update_user_save() throws IOException {
+        var params = new UpdateUserParams(
+                1,
+                "john",
+                "doe",
+                new MockMultipartFile("name", "origName", "image/jpg", new byte[]{})
+        );
         var user = new User(params.getId());
         when(userRepository.findById(params.getId())).thenReturn(Optional.of(user));
         userService.update(params);
         verify(userRepository).save(argThat(allOf(
                 hasProperty("id", is(params.getId())),
                 hasProperty("firstName", is(params.getFirstName())),
-                hasProperty("lastName", is(params.getLastName()))
+                hasProperty("lastName", is(params.getLastName())),
+                hasProperty("profilePic", allOf(
+                        hasProperty("content", is(params.getProfilePic().getBytes())),
+                        hasProperty("type", is(params.getProfilePic().getContentType())),
+                        hasProperty("name", is(params.getProfilePic().getOriginalFilename()))
+                ))
         )));
     }
 

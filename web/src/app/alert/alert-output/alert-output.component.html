@@ -1,0 +1,10 @@
+<div class="alert-output">
+  <alert *ngFor="let alert of alerts"
+         [type]="alert.type"
+         [dismissOnTimeout]="alert.timeout"
+         [dismissible]="true"
+         (onClosed)="handleClose(alert)"
+  >
+    {{alert.message}}
+  </alert>
+</div>

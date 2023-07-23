@@ -1,0 +1,53 @@
+<div class="card mb-0">
+  <div class="card-body">
+    <div class="text-center mb-3">
+      <div class="mb-3 mt-1"><i class="bi bi-shield-lock" style="font-size: 3rem"></i></div>
+      <h5 class="mb-1">Log in to your account</h5>
+      <div class="text-muted">Enter credentials below</div>
+    </div>
+    <form class="login-form"
+          [class.was-validated]="wasValidated"
+          #form="ngForm"
+          (ngSubmit)="login(form)"
+    >
+      <div class="mb-3">
+        <tm-input type="email"
+                  name="email"
+                  placeholder="Email"
+                  [(ngModel)]="email"
+                  [required]="true"
+                  prependIcon="bi bi-envelope"
+        ></tm-input>
+      </div>
+      <div class="mb-3">
+        <tm-input type="password"
+                  name="password"
+                  placeholder="Password"
+                  [(ngModel)]="password"
+                  [required]="true"
+                  prependIcon="bi bi-lock"
+        ></tm-input>
+      </div>
+      <div class="mb-3">
+        <tm-checkbox name="rememberMe"
+                     label="Remember me"
+                     [(ngModel)]="rememberMe"
+        ></tm-checkbox>
+      </div>
+      <div class="mb-3">
+        <tm-spinner-button className="btn-primary w-100"
+                           btnType="submit"
+                           icon="bi bi-arrow-right-circle"
+                           text="Log in"
+                           [spin]="isSubmitting"
+        ></tm-spinner-button>
+      </div>
+    </form>
+    <div class="mb-3 text-center text-muted">
+      <span>Don't have an account?</span>
+    </div>
+    <div class="d-grid">
+      <a routerLink="/register" class="btn btn-light btn-block">Register</a>
+    </div>
+  </div>
+</div>

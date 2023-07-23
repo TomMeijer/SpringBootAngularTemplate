@@ -1,0 +1,76 @@
+<div class="card mb-0">
+  <div class="card-body">
+    <div class="text-center mb-3">
+      <div class="mb-3 mt-1"><i class="bi bi-plus-circle text-success" style="font-size: 3rem"></i></div>
+      <h5 class="mb-1">Create an account</h5>
+      <div class="text-muted">Enter information below</div>
+    </div>
+    <form class="register-form"
+          [class.was-validated]="wasValidated"
+          #form="ngForm"
+          (ngSubmit)="register(form)"
+    >
+      <div class="mb-3">
+        <tm-input name="firstName"
+                  placeholder="First name (optional)"
+                  [(ngModel)]="request.firstName"
+                  prependIcon="bi bi-person"
+        ></tm-input>
+      </div>
+      <div class="mb-3">
+        <tm-input name="lastName"
+                  placeholder="Last name (optional)"
+                  [(ngModel)]="request.lastName"
+                  prependIcon="bi bi-person"
+        ></tm-input>
+      </div>
+      <div class="mb-3">
+        <tm-input type="email"
+                  name="email"
+                  placeholder="Email"
+                  [(ngModel)]="request.email"
+                  [required]="true"
+                  prependIcon="bi bi-envelope"
+        ></tm-input>
+      </div>
+      <div class="mb-3">
+        <tm-input type="password"
+                  name="password"
+                  placeholder="Password"
+                  [(ngModel)]="request.password"
+                  [required]="true"
+                  prependIcon="bi bi-lock"
+        ></tm-input>
+        <password-strength-meter [password]="request.password"></password-strength-meter>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input #repeatPasswordInput="ngModel"
+               type="password"
+               name="repeatPassword"
+               class="form-control"
+               [(ngModel)]="repeatPassword"
+               required
+               placeholder="Repeat password"
+               appRepeatedPassword
+               [password]="request.password"
+        >
+        <div *ngIf="repeatPasswordInput.errors?.message" class="invalid-feedback">{{repeatPasswordInput.errors.message}}</div>
+      </div>
+      <div class="mb-3">
+        <tm-spinner-button className="btn-success w-100"
+                           btnType="submit"
+                           icon="bi bi-arrow-right-circle"
+                           text="Register"
+                           [spin]="isSubmitting"
+        ></tm-spinner-button>
+      </div>
+    </form>
+    <div class="mb-3 text-center text-muted">
+      <span>Already have an account?</span>
+    </div>
+    <div class="d-grid">
+      <a routerLink="/login" class="btn btn-light btn-block">Log in</a>
+    </div>
+  </div>
+</div>

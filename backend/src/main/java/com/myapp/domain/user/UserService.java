@@ -1,6 +1,9 @@
 package com.myapp.domain.user;
 
+import com.myapp.domain.user.entity.File;
 import com.myapp.domain.user.entity.User;
+import com.myapp.domain.user.exception.EmailAlreadyExistsException;
+import com.myapp.domain.user.exception.ProfilePicReadException;
 import com.myapp.domain.user.model.dto.RegisterUserDto;
 import com.myapp.domain.user.model.dto.UserDto;
 import com.myapp.domain.user.model.params.RegisterUserParams;
@@ -10,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -24,9 +29,11 @@ public class UserService {
     public RegisterUserDto register(RegisterUserParams params) {
         Optional<User> optionalUser = userRepository.findByEmail(params.getEmail());
         if (optionalUser.isPresent()) {
-            throw new IllegalArgumentException("An account with this email address already exists");
+            throw new EmailAlreadyExistsException(params.getEmail());
         }
         var user = new User();
+        user.setFirstName(params.getFirstName());
+        user.setLastName(params.getLastName());
         user.setEmail(params.getEmail());
         user.setPassword(passwordEncoder.encode(params.getPassword()));
         user = userRepository.save(user);
@@ -47,7 +54,21 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         user.setFirstName(params.getFirstName());
         user.setLastName(params.getLastName());
+        user.setProfilePic(params.getProfilePic() != null ? createProfilePicFile(user, params.getProfilePic()) : null);
         userRepository.save(user);
+    }
+
+    private File createProfilePicFile(User user, MultipartFile profilePic) {
+        try {
+            return new File(
+                    user.getProfilePic() != null ? user.getProfilePic().getId() : null,
+                    profilePic.getBytes(),
+                    profilePic.getContentType(),
+                    profilePic.getOriginalFilename()
+            );
+        } catch (IOException e) {
+            throw new ProfilePicReadException(e);
+        }
     }
 
     public void delete(int id) {

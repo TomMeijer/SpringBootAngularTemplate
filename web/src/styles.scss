@@ -1,0 +1,18 @@
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.popover {
+  position: absolute;
+
+  .popover-arrow {
+    position: absolute;
+  }
+}

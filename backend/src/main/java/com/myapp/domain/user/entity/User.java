@@ -35,6 +35,11 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_pic_id", referencedColumnName = "id")
+    @JsonIgnore
+    private File profilePic;
+
     @Column(name = "created_on", nullable = false)
     @CreationTimestamp
     private Date createdOn;
