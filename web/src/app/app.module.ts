@@ -12,16 +12,14 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './domain/home/home.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {TmBootstrapModule} from '@tommeijer/tm-bootstrap/src/lib/tm-bootstrap.module';
 import {AuthInterceptor} from './security/auth.interceptor';
 import {ErrorInterceptor} from './error/error.interceptor';
-import { AlertOutputComponent } from './alert/alert-output/alert-output.component';
-import {AlertModule} from 'ngx-bootstrap/alert';
 import {PasswordStrengthMeterModule} from 'angular-password-strength-meter';
 import {RepeatedPasswordValidatorDirective} from './validator/repeated-password-validator.directive';
 import { ProfileComponent } from './domain/user/component/profile/profile.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {PopoverModule} from 'ngx-bootstrap/popover';
+import {TmBootstrapModule} from '@tommeijer/tm-bootstrap';
 
 @NgModule({
   declarations: [
@@ -33,7 +31,6 @@ import {PopoverModule} from 'ngx-bootstrap/popover';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    AlertOutputComponent,
     RepeatedPasswordValidatorDirective,
     ProfileComponent
   ],
@@ -44,7 +41,6 @@ import {PopoverModule} from 'ngx-bootstrap/popover';
     HttpClientModule,
     FormsModule,
     TmBootstrapModule,
-    AlertModule,
     PasswordStrengthMeterModule.forRoot(),
     ModalModule.forRoot(),
     PopoverModule

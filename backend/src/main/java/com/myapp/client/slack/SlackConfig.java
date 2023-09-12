@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SlackConfig {
-    public static final String BASE_URL = "https://slack.com/api";
+    private static final String BASE_URL = "https://slack.com/api";
 
     private final String token;
 

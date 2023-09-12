@@ -3,7 +3,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {AuthService} from '../security/auth.service';
-import {AlertService} from '../alert/alert.service';
+import {AlertService} from '@tommeijer/tm-bootstrap';
 
 const DEFAULT_ERROR_MSG = 'Something went wrong. Please try again later or contact support.'
 

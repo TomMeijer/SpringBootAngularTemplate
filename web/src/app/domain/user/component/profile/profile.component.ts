@@ -3,9 +3,9 @@ import {BsModalRef} from 'ngx-bootstrap/modal';
 import {UserService} from '../../user.service';
 import {User} from '../../model/user';
 import {UpdateUserRequest} from '../../model/update-user-request';
-import {FileUtils} from '@tommeijer/tm-bootstrap/src/lib/utils/file-utils';
 import {NgForm} from '@angular/forms';
 import {AuthService} from '../../../../security/auth.service';
+import {FileUtils} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-profile',

@@ -4,6 +4,7 @@ import {UserService} from '../../domain/user/user.service';
 import {AuthService} from '../../security/auth.service';
 import {Router} from '@angular/router';
 import {RegisterUserRequest} from '../../domain/user/model/register-user-request';
+import {AlertService} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,7 @@ export class RegisterComponent {
   public isSubmitting = false;
 
   constructor(private userService: UserService,
+              private alertService: AlertService,
               private authService: AuthService,
               private router: Router) {
   }
@@ -30,6 +32,7 @@ export class RegisterComponent {
     this.userService.register(this.request).subscribe(
       (response) => {
         this.isSubmitting = false;
+        this.alertService.clear();
         this.authService.saveAuth(response.token, true);
         this.router.navigateByUrl('/home');
       },
