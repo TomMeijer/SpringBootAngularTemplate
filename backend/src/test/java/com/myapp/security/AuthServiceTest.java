@@ -3,6 +3,7 @@ package com.myapp.security;
 import com.myapp.domain.user.entity.User;
 import com.myapp.security.model.AuthParams;
 import com.myapp.security.model.UserPrincipal;
+import com.tommeijer.javalib.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

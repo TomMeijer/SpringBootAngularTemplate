@@ -1,6 +1,7 @@
 package com.myapp.config;
 
-import com.myapp.security.AuthTokenFilter;
+import com.tommeijer.javalib.security.AuthTokenFilter;
+import com.tommeijer.javalib.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,17 +29,17 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+    private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
-    private final AuthTokenFilter authTokenFilter;
     private final PasswordEncoder passwordEncoder;
     private final List<String> allowedOrigins;
 
-    public WebSecurityConfig(UserDetailsService userDetailsService,
-                             AuthTokenFilter authTokenFilter,
+    public WebSecurityConfig(TokenService tokenService,
+                             UserDetailsService userDetailsService,
                              PasswordEncoder passwordEncoder,
                              @Value("${app.config.cors.allowed-origins}") List<String> allowedOrigins) {
+        this.tokenService = tokenService;
         this.userDetailsService = userDetailsService;
-        this.authTokenFilter = authTokenFilter;
         this.passwordEncoder = passwordEncoder;
         this.allowedOrigins = allowedOrigins;
     }
@@ -52,7 +53,7 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.POST, "/auth", "/user").permitAll().requestMatchers("/error").permitAll()
                 .anyRequest().authenticated().and()
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthTokenFilter(tokenService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

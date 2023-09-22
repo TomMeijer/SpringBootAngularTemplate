@@ -1,8 +1,8 @@
 package com.myapp.client.slack;
 
-import com.myapp.utils.auth.BearerAuthInterceptor;
-import com.myapp.utils.http.DefaultHttpClient;
-import com.myapp.utils.http.HttpClient;
+import com.tommeijer.javalib.http.BearerAuthInterceptor;
+import com.tommeijer.javalib.http.DefaultHttpClient;
+import com.tommeijer.javalib.http.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

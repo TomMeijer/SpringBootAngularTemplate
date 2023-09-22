@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.myapp</groupId>
+        <groupId>com.tommeijer</groupId>
         <artifactId>myapp</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -35,6 +35,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.tommeijer</groupId>
+            <artifactId>javalib</artifactId>
+            <version>1.0.2</version>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

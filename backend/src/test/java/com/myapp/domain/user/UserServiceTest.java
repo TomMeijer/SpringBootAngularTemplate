@@ -4,7 +4,7 @@ import com.myapp.domain.user.entity.User;
 import com.myapp.domain.user.exception.EmailAlreadyExistsException;
 import com.myapp.domain.user.model.params.RegisterUserParams;
 import com.myapp.domain.user.model.params.UpdateUserParams;
-import com.myapp.security.TokenService;
+import com.tommeijer.javalib.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

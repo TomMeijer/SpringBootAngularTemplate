@@ -1,6 +1,10 @@
-package com.myapp.error.logging;
+package com.myapp.config;
 
-import com.myapp.utils.http.HttpClient;
+import com.tommeijer.javalib.error.logging.ConsoleErrorLogger;
+import com.tommeijer.javalib.error.logging.DelegatingErrorLogger;
+import com.tommeijer.javalib.error.logging.ErrorLogger;
+import com.tommeijer.javalib.error.logging.SlackErrorLogger;
+import com.tommeijer.javalib.http.HttpClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

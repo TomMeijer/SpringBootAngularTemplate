@@ -3,6 +3,7 @@ package com.myapp.security;
 import com.myapp.security.model.AuthParams;
 import com.myapp.security.model.TokenDto;
 import com.myapp.security.model.UserPrincipal;
+import com.tommeijer.javalib.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

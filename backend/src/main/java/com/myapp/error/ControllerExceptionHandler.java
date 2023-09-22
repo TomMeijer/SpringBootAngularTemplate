@@ -2,7 +2,7 @@ package com.myapp.error;
 
 import com.myapp.domain.user.exception.EmailAlreadyExistsException;
 import com.myapp.domain.user.exception.ProfilePicReadException;
-import com.myapp.error.logging.ErrorLogger;
+import com.tommeijer.javalib.error.logging.ErrorLogger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;

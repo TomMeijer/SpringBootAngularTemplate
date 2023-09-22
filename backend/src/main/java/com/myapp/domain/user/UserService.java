@@ -8,7 +8,7 @@ import com.myapp.domain.user.model.dto.RegisterUserDto;
 import com.myapp.domain.user.model.dto.UserDto;
 import com.myapp.domain.user.model.params.RegisterUserParams;
 import com.myapp.domain.user.model.params.UpdateUserParams;
-import com.myapp.security.TokenService;
+import com.tommeijer.javalib.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
