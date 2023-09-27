@@ -3,6 +3,7 @@ package com.myapp.error;
 import com.myapp.domain.user.exception.EmailAlreadyExistsException;
 import com.myapp.domain.user.exception.ProfilePicReadException;
 import com.tommeijer.javalib.error.logging.ErrorLogger;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +32,12 @@ public class ControllerExceptionHandler {
     public ResponseStatusException handleBadCredentialsException(BadCredentialsException e) {
         errorLogger.log(e.getMessage(), e);
         return new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid username/password combination.");
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseStatusException handleJwtException(JwtException e) {
+        errorLogger.log(e.getMessage(), e);
+        return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication");
     }
 
     @ExceptionHandler(Exception.class)

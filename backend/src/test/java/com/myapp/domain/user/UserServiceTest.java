@@ -31,13 +31,15 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private TokenService tokenService;
+    private TokenService accessTokenService;
+    @Mock
+    private TokenService refreshTokenService;
 
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, passwordEncoder, tokenService);
+        userService = new UserService(userRepository, passwordEncoder, accessTokenService, refreshTokenService);
     }
 
     @Test
@@ -56,11 +58,14 @@ class UserServiceTest {
                 hasProperty("password", is(encodedPassword))
         )))).thenReturn(savedUser);
 
-        var token = "token";
-        when(tokenService.create(savedUser.getEmail())).thenReturn(token);
+        var accessToken = "accessToken";
+        when(accessTokenService.create(savedUser.getEmail())).thenReturn(accessToken);
+        var refreshToken = "refreshToken";
+        when(refreshTokenService.create(savedUser.getEmail())).thenReturn(refreshToken);
 
         var result = userService.register(params);
-        assertThat(result, hasProperty("token", is(token)));
+        assertThat(result, hasProperty("accessToken", is(accessToken)));
+        assertThat(result, hasProperty("refreshToken", is(refreshToken)));
     }
 
     @Test

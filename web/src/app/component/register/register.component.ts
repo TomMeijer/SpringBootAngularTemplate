@@ -33,7 +33,7 @@ export class RegisterComponent {
       (response) => {
         this.isSubmitting = false;
         this.alertService.clear();
-        this.authService.saveAuth(response.token, true);
+        this.authService.saveAuth(response.accessToken, response.refreshToken, true);
         this.router.navigateByUrl('/home');
       },
       () => this.isSubmitting = false

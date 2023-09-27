@@ -1,5 +1,6 @@
 package com.myapp.config;
 
+import com.tommeijer.javalib.error.logging.ErrorLogger;
 import com.tommeijer.javalib.security.AuthTokenFilter;
 import com.tommeijer.javalib.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,20 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
-    private final TokenService tokenService;
+    private final TokenService accessTokenService;
     private final UserDetailsService userDetailsService;
+    private final ErrorLogger errorLogger;
     private final PasswordEncoder passwordEncoder;
     private final List<String> allowedOrigins;
 
-    public WebSecurityConfig(TokenService tokenService,
+    public WebSecurityConfig(TokenService accessTokenService,
                              UserDetailsService userDetailsService,
+                             ErrorLogger errorLogger,
                              PasswordEncoder passwordEncoder,
                              @Value("${app.config.cors.allowed-origins}") List<String> allowedOrigins) {
-        this.tokenService = tokenService;
+        this.accessTokenService = accessTokenService;
         this.userDetailsService = userDetailsService;
+        this.errorLogger = errorLogger;
         this.passwordEncoder = passwordEncoder;
         this.allowedOrigins = allowedOrigins;
     }
@@ -51,9 +55,9 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/auth", "/user").permitAll().requestMatchers("/error").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth", "auth/refresh-access-token", "/user").permitAll()
                 .anyRequest().authenticated().and()
-                .addFilterBefore(new AuthTokenFilter(tokenService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new AuthTokenFilter(accessTokenService, userDetailsService, errorLogger), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

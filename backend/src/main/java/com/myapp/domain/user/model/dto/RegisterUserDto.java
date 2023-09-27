@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RegisterUserDto {
-    private final String token;
+    private final String accessToken;
+    private final String refreshToken;
 }

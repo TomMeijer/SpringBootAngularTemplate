@@ -32,7 +32,7 @@ export class LoginComponent {
       response => {
         this.isSubmitting = false;
         this.alertService.clear();
-        this.authService.saveAuth(response.token, this.rememberMe);
+        this.authService.saveAuth(response.accessToken, response.refreshToken, this.rememberMe);
         this.router.navigateByUrl('/home');
       },
       () => this.isSubmitting = false

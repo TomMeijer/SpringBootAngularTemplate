@@ -2,7 +2,6 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {AuthService} from '../security/auth.service';
 import {AlertService} from '@tommeijer/tm-bootstrap';
 
 const DEFAULT_ERROR_MSG = 'Something went wrong. Please try again later or contact support.'
@@ -12,18 +11,13 @@ const DEFAULT_ERROR_MSG = 'Something went wrong. Please try again later or conta
 })
 export class ErrorInterceptor implements HttpInterceptor {
 
-  public constructor(private authService: AuthService,
-                     private alertService: AlertService) { }
+  public constructor(private alertService: AlertService) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError(response => {
         const msg = this.getErrorMsg(response);
         this.alertService.showDanger(msg);
-
-        if (response.status === 403 || response.status === 401) {
-          this.authService.logout();
-        }
         return throwError(response);
       })
     );

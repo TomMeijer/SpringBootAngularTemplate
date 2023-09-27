@@ -6,8 +6,10 @@ import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {AuthResponse} from './auth-response';
 import {UserService} from '../domain/user/user.service';
+import {RefreshAccessTokenResponse} from './refresh-access-token-response';
 
-const TOKEN_KEY = 'auth-token';
+const ACCESS_TOKEN_KEY = 'tm-access-token';
+const REFRESH_TOKEN_KEY = 'tm-refresh-token';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +25,9 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth`, {email, password});
   }
 
-  public refreshToken(): void {
-    this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refresh-token`, {}).subscribe(response => {
-      this.saveAuth(response.token, !!localStorage.getItem(TOKEN_KEY));
-    });
+  public refreshAccessToken(): Observable<RefreshAccessTokenResponse> {
+    const request = {refreshToken: this.getStorageItem(REFRESH_TOKEN_KEY)}
+    return this.http.post<RefreshAccessTokenResponse>(`${environment.apiUrl}/auth/refresh-access-token`, request);
   }
 
   public logout(): void {
@@ -36,26 +37,50 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token && !this.jwtService.isTokenExpired(token);
+    const accessToken = this.getAccessToken();
+    const refreshToken = this.getRefreshToken();
+    return !!accessToken && (!this.jwtService.isTokenExpired(accessToken) || (!!refreshToken && !this.jwtService.isTokenExpired(refreshToken)));
   }
 
-  public saveAuth(token: string, remember: boolean): void {
+  public isTokenExpired(token: string): boolean {
+    return this.jwtService.isTokenExpired(token);
+  }
+
+  public saveAuth(accessToken: string, refreshToken: string, remember: boolean): void {
     this.clearStorage();
-    if (remember) {
-      localStorage.setItem(TOKEN_KEY, token);
-    } else {
-      sessionStorage.setItem(TOKEN_KEY, token);
-    }
+    this.setStorageItem(ACCESS_TOKEN_KEY, accessToken, remember);
+    this.setStorageItem(REFRESH_TOKEN_KEY, refreshToken, remember);
   }
 
-  public getToken(): string | null {
-    const token = localStorage.getItem(TOKEN_KEY);
-    return token ? token : sessionStorage.getItem(TOKEN_KEY);
+  public saveAccessToken(accessToken: string): void {
+    this.setStorageItem(ACCESS_TOKEN_KEY, accessToken, !!localStorage.getItem(ACCESS_TOKEN_KEY));
+  }
+
+  public getAccessToken(): string {
+    return this.getStorageItem(ACCESS_TOKEN_KEY);
+  }
+
+  private getRefreshToken(): string {
+    return this.getStorageItem(REFRESH_TOKEN_KEY);
   }
 
   private clearStorage(): void {
-    sessionStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
+
+  private getStorageItem(key: string): string {
+    const value = localStorage.getItem(key);
+    return value ? value : sessionStorage.getItem(key);
+  }
+
+  private setStorageItem(key: string, value: string, remember: boolean): void {
+    if (remember) {
+      localStorage.setItem(key, value);
+    } else {
+      sessionStorage.setItem(key, value);
+    }
   }
 }

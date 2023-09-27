@@ -23,7 +23,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
+    private final TokenService accessTokenService;
+    private final TokenService refreshTokenService;
 
     @Transactional
     public RegisterUserDto register(RegisterUserParams params) {
@@ -38,8 +39,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(params.getPassword()));
         user = userRepository.save(user);
 
-        String token = tokenService.create(user.getEmail());
-        return new RegisterUserDto(token);
+        String accessToken = accessTokenService.create(user.getEmail());
+        String refreshToken = refreshTokenService.create(user.getEmail());
+        return new RegisterUserDto(accessToken, refreshToken);
     }
 
     public UserDto get(int id) {
