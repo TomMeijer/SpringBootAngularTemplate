@@ -6,6 +6,8 @@ import {UpdateUserRequest} from './model/update-user-request';
 import {environment} from '../../../environments/environment';
 import {RegisterUserRequest} from './model/register-user-request';
 import {RegisterUserResponse} from './model/register-user-response';
+import {Router} from '@angular/router';
+import {AuthService} from '@tommeijer/tm-bootstrap';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,9 @@ export class UserService {
   private user$$ = new BehaviorSubject<User>(null);
   user$ = this.user$$.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private authService: AuthService,
+              private router: Router) {
   }
 
   public update(request: UpdateUserRequest): Observable<void> {
@@ -39,7 +43,9 @@ export class UserService {
     return this.http.delete<void>(`${environment.apiUrl}/user`);
   }
 
-  public clear(): void {
+  public logout(): void {
+    this.authService.clearAuth();
     this.user$$.next(null);
+    this.router.navigateByUrl('/login');
   }
 }

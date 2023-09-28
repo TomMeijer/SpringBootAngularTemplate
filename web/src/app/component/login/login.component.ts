@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {AuthService} from '../../security/auth.service';
 import {Router} from '@angular/router';
-import {AlertService} from '@tommeijer/tm-bootstrap';
+import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-login',

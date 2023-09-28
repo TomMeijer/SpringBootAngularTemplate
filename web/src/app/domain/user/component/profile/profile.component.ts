@@ -4,7 +4,6 @@ import {UserService} from '../../user.service';
 import {User} from '../../model/user';
 import {UpdateUserRequest} from '../../model/update-user-request';
 import {NgForm} from '@angular/forms';
-import {AuthService} from '../../../../security/auth.service';
 import {FileUtils} from '@tommeijer/tm-bootstrap';
 
 @Component({
@@ -20,9 +19,7 @@ export class ProfileComponent implements OnInit {
   public isSubmitting = false;
   public isDeleting = false;
 
-  constructor(public modalRef: BsModalRef,
-              private userService: UserService,
-              private authService: AuthService) {
+  constructor(public modalRef: BsModalRef, private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -63,7 +60,7 @@ export class ProfileComponent implements OnInit {
       () => {
         this.isDeleting = false;
         this.modalRef.hide();
-        this.authService.logout();
+        this.userService.logout();
       },
       () => this.isDeleting = false
     );

@@ -12,14 +12,13 @@ import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './domain/home/home.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {AuthInterceptor} from './security/auth.interceptor';
-import {ErrorInterceptor} from './error/error.interceptor';
 import {PasswordStrengthMeterModule} from 'angular-password-strength-meter';
 import {RepeatedPasswordValidatorDirective} from './validator/repeated-password-validator.directive';
 import { ProfileComponent } from './domain/user/component/profile/profile.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {PopoverModule} from 'ngx-bootstrap/popover';
-import {TmBootstrapModule} from '@tommeijer/tm-bootstrap';
+import {AuthInterceptor, ErrorInterceptor, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
+import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -46,6 +45,7 @@ import {TmBootstrapModule} from '@tommeijer/tm-bootstrap';
     PopoverModule
   ],
   providers: [
+    {provide: 'apiUrl', useValue: environment.apiUrl},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ],

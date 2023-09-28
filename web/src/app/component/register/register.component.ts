@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {UserService} from '../../domain/user/user.service';
-import {AuthService} from '../../security/auth.service';
 import {Router} from '@angular/router';
 import {RegisterUserRequest} from '../../domain/user/model/register-user-request';
-import {AlertService} from '@tommeijer/tm-bootstrap';
+import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-register',
