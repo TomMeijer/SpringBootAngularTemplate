@@ -1,0 +1,62 @@
+name: Production deploy
+
+on:
+  workflow_dispatch:
+
+env:
+  BACKEND_DIR: ./backend
+  BACKEND_REMOTE_SERVICE_NAME: myappapi
+  BACKEND_REMOTE_LOCATION: C:/Program Files/MyApp
+  FRONTEND_DIR: ./web
+  FRONTEND_PACKAGE_NAME: web
+  FRONTEND_REMOTE_LOCATION: C:/Program Files/Apache24/htdocs
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: corretto
+        cache: maven
+
+    - name: Package backend
+      working-directory: ${{ env.BACKEND_DIR }}
+      run: mvn package
+
+    - name: Deploy backend to server
+      uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        user: ${{ secrets.SSH_USERNAME }}
+        pass: ${{ secrets.SSH_PASSWORD }}
+        first_ssh: sc queryex ${{ env.BACKEND_REMOTE_SERVICE_NAME }}|Find "STATE"|Find "RUNNING">Nul&&(net stop ${{ env.BACKEND_REMOTE_SERVICE_NAME }})||(echo ${{ env.BACKEND_REMOTE_SERVICE_NAME }} service is not running.)
+        scp: ${{ env.BACKEND_DIR }}/target/*.jar => '"${{ env.BACKEND_REMOTE_LOCATION }}"'
+        last_ssh: net start ${{ env.BACKEND_REMOTE_SERVICE_NAME }}
+
+    - name: Set up Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+        cache-dependency-path: ${{ env.FRONTEND_DIR }}/package-lock.json
+
+    - name: Build frontend
+      working-directory: ${{ env.FRONTEND_DIR }}
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        npm install
+        npm run build-prod
+
+    - name: Deploy frontend to server
+      uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        user: ${{ secrets.SSH_USERNAME }}
+        pass: ${{ secrets.SSH_PASSWORD }}
+        scp: ${{ env.FRONTEND_DIR }}/dist/${{ env.FRONTEND_PACKAGE_NAME}}/* => '"${{ env.FRONTEND_REMOTE_LOCATION }}"'

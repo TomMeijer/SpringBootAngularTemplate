@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>com.tommeijer</groupId>
-        <artifactId>myapp</artifactId>
+        <artifactId>myapp-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>backend</artifactId>
+    <artifactId>myapp</artifactId>
 
     <dependencies>
         <dependency>
