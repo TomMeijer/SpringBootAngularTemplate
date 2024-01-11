@@ -2,9 +2,9 @@ package com.myapp.security;
 
 import com.myapp.security.model.*;
 import com.tommeijer.javalib.security.AuthService;
-import com.tommeijer.javalib.security.model.AccessTokenDto;
 import com.tommeijer.javalib.security.model.AuthParams;
 import com.tommeijer.javalib.security.model.AuthenticatedDto;
+import com.tommeijer.javalib.security.model.RefreshAccessTokenDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-access-token")
-    public AccessTokenDto refreshAccessToken(@RequestBody @Valid RefreshAccessTokenRequest request) {
+    public RefreshAccessTokenDto refreshAccessToken(@RequestBody @Valid RefreshAccessTokenRequest request) {
         return authService.refreshAccessToken(request.getRefreshToken());
     }
 }
