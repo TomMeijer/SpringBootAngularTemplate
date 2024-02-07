@@ -29,7 +29,10 @@ jobs:
 
     - name: Package backend
       working-directory: ${{ env.BACKEND_DIR }}
-      run: mvn package
+      run: mvn -B -Pgithub package --file pom.xml
+      env:
+        GITHUB_ACTOR: TomMeijer
+        GITHUB_TOKEN: ${{ secrets.MAVEN_GITHUB_PACKAGES_TOKEN }}
 
     - name: Deploy backend to server
       uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
