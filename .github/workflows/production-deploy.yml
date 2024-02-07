@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
 
 env:
+  JAVA_VERSION: 17
+  NODE_VERSION: 18
   BACKEND_DIR: ./backend
   BACKEND_REMOTE_SERVICE_NAME: myappapi
   BACKEND_REMOTE_LOCATION: C:/Program Files/MyApp
@@ -18,10 +20,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up JDK 17
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: 17
+        java-version: ${{ env.JAVA_VERSION }}
         distribution: corretto
         cache: maven
 
@@ -39,10 +41,10 @@ jobs:
         scp: ${{ env.BACKEND_DIR }}/target/*.jar => '"${{ env.BACKEND_REMOTE_LOCATION }}"'
         last_ssh: net start ${{ env.BACKEND_REMOTE_SERVICE_NAME }}
 
-    - name: Set up Node.js 18
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: ${{ env.NODE_VERSION }}
         cache: npm
         cache-dependency-path: ${{ env.FRONTEND_DIR }}/package-lock.json
 
