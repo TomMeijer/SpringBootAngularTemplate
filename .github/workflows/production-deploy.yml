@@ -55,7 +55,7 @@ jobs:
       working-directory: ${{ env.FRONTEND_DIR }}
       run: |
         echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-        npm install
+        npm run install-legacy-peer-deps
         npm run build-prod
 
     - name: Deploy frontend to server
