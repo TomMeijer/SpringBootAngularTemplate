@@ -20,7 +20,7 @@ public class File {
     @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
-    @Column(name = "content", nullable = false, columnDefinition = "LONGBLOB")
+    @Column(name = "content")
     @Lob
     private byte[] content;
 

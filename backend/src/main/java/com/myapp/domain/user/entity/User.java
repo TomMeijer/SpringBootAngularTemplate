@@ -22,10 +22,10 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     private int id;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     @JsonIgnore
     private String password;
 
@@ -40,7 +40,7 @@ public class User {
     @JsonIgnore
     private File profilePic;
 
-    @Column(name = "created_on", nullable = false)
+    @Column(name = "created_on")
     @CreationTimestamp
     private Date createdOn;
 
