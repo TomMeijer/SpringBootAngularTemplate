@@ -7,6 +7,7 @@ import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-register',
+  standalone: false,
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })

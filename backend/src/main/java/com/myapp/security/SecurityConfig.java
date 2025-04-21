@@ -3,7 +3,6 @@ package com.myapp.security;
 import com.tommeijer.javalib.security.AuthService;
 import com.tommeijer.javalib.security.JwtService;
 import com.tommeijer.javalib.security.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +43,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Autowired
     public AuthService authService(AuthenticationManager authenticationManager,
                                    TokenService accessTokenService,
                                    TokenService refreshTokenService) {

@@ -3,6 +3,7 @@ import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from '@angu
 
 @Directive({
   selector: '[appRepeatedPassword]',
+  standalone: false,
   providers: [
     {provide: NG_VALIDATORS, useExisting: RepeatedPasswordValidatorDirective, multi: true}
   ]

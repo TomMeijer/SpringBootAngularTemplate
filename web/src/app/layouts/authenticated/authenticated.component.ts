@@ -3,6 +3,7 @@ import {UserService} from '../../domain/user/user.service';
 
 @Component({
   selector: 'app-authenticated',
+  standalone: false,
   templateUrl: './authenticated.component.html',
   styleUrls: ['./authenticated.component.scss']
 })

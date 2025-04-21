@@ -10,7 +10,7 @@ import { FooterComponent } from './component/footer/footer.component';
 import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './domain/home/home.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {RepeatedPasswordValidatorDirective} from './validator/repeated-password-validator.directive';
 import { ProfileComponent } from './domain/user/component/profile/profile.component';
@@ -38,7 +38,6 @@ import {provideZxvbnServiceForPSM} from "angular-password-strength-meter/zxcvbn"
     BrowserModule,
     RouterOutlet,
     AppRoutingModule,
-    HttpClientModule,
     FormsModule,
     TmBootstrapModule,
     ModalModule.forRoot(),
@@ -47,6 +46,7 @@ import {provideZxvbnServiceForPSM} from "angular-password-strength-meter/zxcvbn"
   ],
   providers: [
     {provide: 'apiUrl', useValue: environment.apiUrl},
+    provideHttpClient(withInterceptorsFromDi()),
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     provideZxvbnServiceForPSM()

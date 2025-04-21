@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/auth", "auth/refresh-access-token", "/user").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth", "/auth/refresh-access-token", "/user").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new AuthTokenFilter(accessTokenService, userDetailsService, errorLogger), UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -13,7 +13,6 @@ import {AuthService} from '@tommeijer/tm-bootstrap';
   providedIn: 'root'
 })
 export class UserService {
-
   private user$$ = new BehaviorSubject<User>(null);
   user$ = this.user$$.asObservable();
 

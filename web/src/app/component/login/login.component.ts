@@ -5,6 +5,7 @@ import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-login',
+  standalone: false,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

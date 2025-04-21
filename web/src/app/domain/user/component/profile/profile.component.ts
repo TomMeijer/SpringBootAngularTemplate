@@ -8,6 +8,7 @@ import {FileUtils} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-profile',
+  standalone: false,
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
