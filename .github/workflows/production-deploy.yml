@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  JAVA_VERSION: 17
-  NODE_VERSION: 18
+  JAVA_VERSION: 21
+  NODE_VERSION: 22
   BACKEND_DIR: ./backend
   BACKEND_REMOTE_SERVICE_NAME: myappapi
   BACKEND_REMOTE_LOCATION: C:/Program Files/MyApp
