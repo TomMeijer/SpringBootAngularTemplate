@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
 import {UserService} from '../../domain/user/user.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {RegisterUserRequest} from '../../domain/user/model/register-user-request';
-import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
+import {AlertService, AuthService, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
+import {PasswordStrengthMeterComponent} from "@wise-community/angular-password-strength-meter";
+import {RepeatedPasswordValidatorDirective} from "../../validator/repeated-password-validator.directive";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-register',
-  standalone: false,
   templateUrl: './register.component.html',
+  imports: [
+    FormsModule,
+    TmBootstrapModule,
+    PasswordStrengthMeterComponent,
+    RepeatedPasswordValidatorDirective,
+    NgIf,
+    RouterLink
+  ],
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
@@ -17,10 +27,10 @@ export class RegisterComponent {
   public wasValidated = false;
   public isSubmitting = false;
 
-  constructor(private userService: UserService,
-              private alertService: AlertService,
-              private authService: AuthService,
-              private router: Router) {
+  constructor(private readonly userService: UserService,
+              private readonly alertService: AlertService,
+              private readonly authService: AuthService,
+              private readonly router: Router) {
   }
 
   public register(form: NgForm): void {

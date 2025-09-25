@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {Router} from '@angular/router';
-import {AlertService, AuthService} from '@tommeijer/tm-bootstrap';
+import {FormsModule, NgForm} from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {AlertService, AuthService, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
 
 @Component({
   selector: 'app-login',
-  standalone: false,
   templateUrl: './login.component.html',
+  imports: [
+    FormsModule,
+    TmBootstrapModule,
+    RouterLink
+  ],
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
@@ -17,9 +21,9 @@ export class LoginComponent {
   public wasValidated = false;
   public isSubmitting = false;
 
-  constructor(private authService: AuthService,
-              private alertService: AlertService,
-              private router: Router) {
+  constructor(private readonly authService: AuthService,
+              private readonly alertService: AlertService,
+              private readonly router: Router) {
   }
 
   public login(form: NgForm): void {

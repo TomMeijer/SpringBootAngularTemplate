@@ -13,12 +13,12 @@ import {AuthService} from '@tommeijer/tm-bootstrap';
   providedIn: 'root'
 })
 export class UserService {
-  private user$$ = new BehaviorSubject<User>(null);
+  private readonly user$$ = new BehaviorSubject<User>(null);
   user$ = this.user$$.asObservable();
 
-  constructor(private http: HttpClient,
-              private authService: AuthService,
-              private router: Router) {
+  constructor(private readonly http: HttpClient,
+              private readonly authService: AuthService,
+              private readonly router: Router) {
   }
 
   public update(request: UpdateUserRequest): Observable<void> {

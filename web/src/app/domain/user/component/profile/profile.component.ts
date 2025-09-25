@@ -3,13 +3,18 @@ import {BsModalRef} from 'ngx-bootstrap/modal';
 import {UserService} from '../../user.service';
 import {User} from '../../model/user';
 import {UpdateUserRequest} from '../../model/update-user-request';
-import {NgForm} from '@angular/forms';
-import {FileUtils} from '@tommeijer/tm-bootstrap';
+import {FormsModule, NgForm} from '@angular/forms';
+import {FileUtils, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
+import {PopoverDirective} from "ngx-bootstrap/popover";
 
 @Component({
   selector: 'app-profile',
-  standalone: false,
   templateUrl: './profile.component.html',
+  imports: [
+    FormsModule,
+    TmBootstrapModule,
+    PopoverDirective
+  ],
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
@@ -20,7 +25,8 @@ export class ProfileComponent implements OnInit {
   public isSubmitting = false;
   public isDeleting = false;
 
-  constructor(public modalRef: BsModalRef, private userService: UserService) {
+  constructor(public modalRef: BsModalRef,
+              private readonly userService: UserService) {
   }
 
   ngOnInit(): void {

@@ -8,8 +8,8 @@ import {AuthService} from '@tommeijer/tm-bootstrap';
 })
 export class AuthGuard implements CanActivateChild {
 
-  public constructor(private authService: AuthService,
-                     private userService: UserService) { }
+  public constructor(private readonly authService: AuthService,
+                     private readonly userService: UserService) { }
 
   public canActivateChild(): boolean {
     if (!this.authService.isAuthenticated()) {

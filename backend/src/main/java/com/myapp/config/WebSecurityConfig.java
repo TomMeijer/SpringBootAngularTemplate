@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,13 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+    private static final List<String> PUBLIC_POST_ENDPOINTS = List.of(
+            "/auth",
+            "/auth/refresh-access-token",
+            "/user"
+    );
+    private static final String CORS_PATTERN = "/**";
+
     private final TokenService accessTokenService;
     private final UserDetailsService userDetailsService;
     private final ErrorLogger errorLogger;
@@ -49,15 +57,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public AuthTokenFilter authTokenFilter() {
+        return new AuthTokenFilter(accessTokenService, userDetailsService, errorLogger);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors().and()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/auth", "/auth/refresh-access-token", "/user").permitAll()
-                .anyRequest().authenticated().and()
-                .addFilterBefore(new AuthTokenFilter(accessTokenService, userDetailsService, errorLogger), UsernamePasswordAuthenticationFilter.class)
+                .cors(cors -> {})
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, PUBLIC_POST_ENDPOINTS.toArray(String[]::new)).permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -65,12 +78,12 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(allowedOrigins);
-        configuration.setAllowedMethods(Collections.singletonList("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setAllowCredentials(true);
 
         var source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(CORS_PATTERN, configuration);
         return source;
     }
 
@@ -82,7 +95,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -16,3 +16,7 @@
     position: absolute;
   }
 }
+
+.was-validated .ng-invalid~.invalid-feedback {
+  display: block;
+}
