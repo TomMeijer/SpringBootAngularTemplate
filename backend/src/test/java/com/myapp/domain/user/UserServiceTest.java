@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    void register_user_save() {
+    void register_ValidParams_SavesUserAndReturnsDto() {
         var params = new RegisterUserParams("john", "doe", "email", "password");
 
         var encodedPassword = "ABC123";
@@ -69,7 +69,7 @@ class UserServiceTest {
     }
 
     @Test
-    void register_existingEmail_throwException() {
+    void register_ExistingEmail_ThrowsEmailAlreadyExistsException() {
         var params = new RegisterUserParams("john", "doe", "email", "password");
         when(userRepository.findByEmail(params.getEmail())).thenReturn(Optional.of(new User()));
         assertThrows(
@@ -80,7 +80,7 @@ class UserServiceTest {
     }
 
     @Test
-    void get_byId_returnUser() {
+    void get_ExistingUserId_ReturnsUserDto() {
         var id = 2;
         var user = new User(id);
         user.setEmail("email");
@@ -100,7 +100,7 @@ class UserServiceTest {
     }
 
     @Test
-    void update_user_save() throws IOException {
+    void update_ValidParams_SavesUser() throws IOException {
         var params = new UpdateUserParams(
                 1,
                 "john",
@@ -123,7 +123,7 @@ class UserServiceTest {
     }
 
     @Test
-    void delete_byId_delete() {
+    void delete_AnyId_CallsUserRepositoryDeleteById() {
         var id = 2;
         userService.delete(id);
         verify(userRepository).deleteById(id);

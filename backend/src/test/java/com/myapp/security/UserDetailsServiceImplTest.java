@@ -27,7 +27,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void loadUserByUsername_email_returnUser() {
+    void loadUserByUsername_ExistingEmail_ReturnsUserPrincipal() {
         var email = "email";
         var user = new User();
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));

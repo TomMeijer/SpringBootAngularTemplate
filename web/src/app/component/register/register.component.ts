@@ -6,7 +6,6 @@ import {RegisterUserRequest} from '../../domain/user/model/register-user-request
 import {AlertService, AuthService, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
 import {PasswordStrengthMeterComponent} from "@wise-community/angular-password-strength-meter";
 import {RepeatedPasswordValidatorDirective} from "../../validator/repeated-password-validator.directive";
-import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-register',
@@ -16,7 +15,6 @@ import {NgIf} from "@angular/common";
     TmBootstrapModule,
     PasswordStrengthMeterComponent,
     RepeatedPasswordValidatorDirective,
-    NgIf,
     RouterLink
   ],
   styleUrls: ['./register.component.scss']

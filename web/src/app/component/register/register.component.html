@@ -55,7 +55,9 @@
                appRepeatedPassword
                [password]="request.password"
         >
-        <div *ngIf="repeatPasswordInput.errors?.message" class="invalid-feedback">{{repeatPasswordInput.errors.message}}</div>
+        @if (repeatPasswordInput.errors?.message) {
+          <div class="invalid-feedback">{{repeatPasswordInput.errors.message}}</div>
+        }
       </div>
       <div class="mb-3">
         <tm-spinner-button className="btn-success w-100"

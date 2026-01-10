@@ -28,4 +28,19 @@ context('Profile', () => {
       expect(body).to.contain('\r\n\r\nHogan\r\n');
     })
   })
+
+  it('can delete the current user\'s account', () => {
+    cy.wait('@getUser')
+    cy.get('[data-cy=profile-dropdown]').click()
+    cy.get('[data-cy=profile-link]').click()
+
+    cy.intercept('DELETE', '/user', { statusCode: 204 }).as('deleteUser')
+
+    cy.contains('button', 'Delete account').click()
+    cy.get('.popover').should('be.visible')
+    cy.contains('button', 'Confirm').click()
+
+    cy.wait('@deleteUser')
+    cy.url().should('include', '/login')
+  })
 })
