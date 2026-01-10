@@ -1,4 +1,4 @@
-import {Directive, Input, OnChanges} from '@angular/core';
+import {Directive, input, OnChanges} from '@angular/core';
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from '@angular/forms';
 
 @Directive({
@@ -8,8 +8,7 @@ import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from '@angu
   ]
 })
 export class RepeatedPasswordValidatorDirective implements Validator, OnChanges {
-  @Input()
-  public password: string;
+  public password = input<string>();
 
   private readonly errorMsg = 'Repeated password does not match';
   private onChange = (): void => {};
@@ -19,7 +18,7 @@ export class RepeatedPasswordValidatorDirective implements Validator, OnChanges 
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return control.value !== this.password ? {invalid: true, message: this.errorMsg} : null;
+    return control.value !== this.password() ? {invalid: true, message: this.errorMsg} : null;
   }
 
   registerOnValidatorChange(fn: () => void): void {

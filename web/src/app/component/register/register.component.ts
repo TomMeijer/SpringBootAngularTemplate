@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {UserService} from '../../domain/user/user.service';
 import {Router, RouterLink} from '@angular/router';
@@ -20,16 +20,15 @@ import {RepeatedPasswordValidatorDirective} from "../../validator/repeated-passw
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  private readonly userService = inject(UserService);
+  private readonly alertService = inject(AlertService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   public request: RegisterUserRequest = {};
   public repeatPassword: string;
   public wasValidated = signal(false);
   public isSubmitting = signal(false);
-
-  constructor(private readonly userService: UserService,
-              private readonly alertService: AlertService,
-              private readonly authService: AuthService,
-              private readonly router: Router) {
-  }
 
   public register(form: NgForm): void {
     this.wasValidated.set(!form.valid);

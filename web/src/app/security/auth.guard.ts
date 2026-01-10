@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {CanActivateChild} from '@angular/router';
 import {UserService} from '../domain/user/user.service';
 import {AuthService} from '@tommeijer/tm-bootstrap';
@@ -7,9 +7,8 @@ import {AuthService} from '@tommeijer/tm-bootstrap';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivateChild {
-
-  public constructor(private readonly authService: AuthService,
-                     private readonly userService: UserService) { }
+  private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
 
   public canActivateChild(): boolean {
     if (!this.authService.isAuthenticated()) {

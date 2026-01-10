@@ -1,11 +1,10 @@
-import {Component, effect, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {BsModalRef} from 'ngx-bootstrap/modal';
 import {UserService} from '../../user.service';
 import {UpdateUserRequest} from '../../model/update-user-request';
 import {FormsModule, NgForm} from '@angular/forms';
 import {FileUtils, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
 import {PopoverDirective} from "ngx-bootstrap/popover";
-import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-profile',
@@ -18,15 +17,17 @@ import {toSignal} from "@angular/core/rxjs-interop";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
-  public user = toSignal(this.userService.user$);
+  public modalRef = inject(BsModalRef);
+  private readonly userService = inject(UserService);
+
+  public user = this.userService.user;
   public request: UpdateUserRequest = {};
   public formChanged = signal(false);
   public wasValidated = signal(false);
   public isSubmitting = signal(false);
   public isDeleting = signal(false);
 
-  constructor(public modalRef: BsModalRef,
-              private readonly userService: UserService) {
+  constructor() {
     effect(() => {
       const user = this.user();
       if (user) {

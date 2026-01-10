@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {User} from './model/user';
 import {UpdateUserRequest} from './model/update-user-request';
 import {environment} from '../../../environments/environment';
@@ -13,13 +13,11 @@ import {AuthService} from '@tommeijer/tm-bootstrap';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly user$$ = new BehaviorSubject<User>(null);
-  user$ = this.user$$.asObservable();
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  constructor(private readonly http: HttpClient,
-              private readonly authService: AuthService,
-              private readonly router: Router) {
-  }
+  public readonly user = signal<User>(null);
 
   public update(request: UpdateUserRequest): Observable<void> {
     const formData = new FormData();
@@ -31,7 +29,7 @@ export class UserService {
 
   public get(): void {
     this.http.get<User>(`${environment.apiUrl}/user`)
-      .subscribe(user => this.user$$.next(user));
+      .subscribe(user => this.user.set(user));
   }
 
   public register(request: RegisterUserRequest): Observable<RegisterUserResponse> {
@@ -44,7 +42,7 @@ export class UserService {
 
   public logout(): void {
     this.authService.clearAuth();
-    this.user$$.next(null);
+    this.user.set(null);
     this.router.navigateByUrl('/login');
   }
 }

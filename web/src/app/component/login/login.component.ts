@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AlertService, AuthService, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
@@ -14,16 +14,15 @@ import {AlertService, AuthService, TmBootstrapModule} from '@tommeijer/tm-bootst
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  private readonly authService = inject(AuthService);
+  private readonly alertService = inject(AlertService);
+  private readonly router = inject(Router);
+
   public email: string;
   public password: string;
   public rememberMe = true;
   public wasValidated = signal(false);
   public isSubmitting = signal(false);
-
-  constructor(private readonly authService: AuthService,
-              private readonly alertService: AlertService,
-              private readonly router: Router) {
-  }
 
   public login(form: NgForm): void {
     this.wasValidated.set(!form.valid);

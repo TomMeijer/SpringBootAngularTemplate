@@ -1,11 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {User} from '../../domain/user/model/user';
 import {UserService} from '../../domain/user/user.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {ProfileComponent} from '../../domain/user/component/profile/profile.component';
 import {RouterLink} from "@angular/router";
-import {toSignal} from "@angular/core/rxjs-interop";
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -15,11 +13,10 @@ import {toSignal} from "@angular/core/rxjs-interop";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  public user = toSignal(this.userService.user$);
+  private readonly userService = inject(UserService);
+  private readonly modalService = inject(BsModalService);
 
-  constructor(private readonly userService: UserService,
-              private readonly modalService: BsModalService) {
-  }
+  public user = this.userService.user;
 
   public getProfilePicSrc(user: User): string {
     if (user.profilePic) {
