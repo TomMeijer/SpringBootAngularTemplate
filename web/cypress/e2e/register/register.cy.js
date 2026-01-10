@@ -4,12 +4,7 @@ context('Register', () => {
   })
 
   it('can register a new user', () => {
-    cy.intercept('POST', '**/user', {
-      body: {
-        accessToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0bSIsImlhdCI6MTc2Nzg0OTYzNSwiZXhwIjoxOTg4Nzc0NDM4LCJhdWQiOiJ0ZXN0Iiwic3ViIjoidGVzdEBjeXByZXNzLmNvbSJ9.H1CV1bpGq6bbwVvWuFXzFlZqf2ySF8hr1JX_fUKAKy0',
-        refreshToken: 'fake-refresh-token'
-      }
-    }).as('registerUser');
+    cy.intercept('POST', '**/user', { fixture: 'auth.json' }).as('registerUser');
 
     cy.get('[name=firstName] input').type('John')
     cy.get('[name=lastName] input').type('Doe')
