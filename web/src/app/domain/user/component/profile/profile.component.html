@@ -5,9 +5,9 @@
 <div class="modal-body">
   <form #form="ngForm"
         class="tm-form"
-        [class.was-validated]="wasValidated"
+        [class.was-validated]="wasValidated()"
         (ngSubmit)="updateUser(form)"
-        (input)="formChanged = true"
+        (input)="formChanged.set(true)"
   >
     <div class="d-flex justify-content-center mb-3">
       <tm-image-uploader name="profilePic"
@@ -18,7 +18,7 @@
                          [clearable]="true"
                          [rounded]="true"
                          [(ngModel)]="request.profilePic"
-                         (onClear)="formChanged = true"
+                         (onClear)="formChanged.set(true)"
                          (click)="$event.stopPropagation()"
       ></tm-image-uploader>
     </div>
@@ -40,16 +40,16 @@
       <tm-input type="text"
                 name="email"
                 label="Email address"
-                [ngModel]="user?.email"
+                [ngModel]="user()?.email"
                 [readOnly]="true"
       ></tm-input>
     </div>
     <div class="d-flex justify-content-between position-relative">
-      <tm-save-button [changed]="formChanged" [submitting]="isSubmitting" data-cy="profile-save-btn"></tm-save-button>
+      <tm-save-button [changed]="formChanged()" [submitting]="isSubmitting()" data-cy="profile-save-btn"></tm-save-button>
       <tm-spinner-button className="btn-danger"
                          icon="bi bi-trash"
                          text="Delete account"
-                         [spin]="isDeleting"
+                         [spin]="isDeleting()"
                          [popover]="deleteConfirmDialog"
                          placement="bottom"
                          [outsideClick]="true"

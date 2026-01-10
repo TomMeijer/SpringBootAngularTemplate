@@ -5,26 +5,28 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul *ngIf="user" class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">Home</a>
-        </li>
-      </ul>
-      <ul *ngIf="user" class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" data-cy="profile-dropdown">
-            <div class="profile-pic-container me-2">
-              <img [src]="profilePicSrc" class="rounded-circle" alt="">
-            </div>
-            <span>{{user.firstName ? user.firstName : 'User'}}</span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item cursor-pointer" (click)="showProfile()" data-cy="profile-link">Profile</a></li>
-            <li><hr class="dropdown-divider"/></li>
-            <li><a class="dropdown-item cursor-pointer" (click)="logout()">Log out</a></li>
-          </ul>
-        </li>
-      </ul>
+      @if (user(); as user) {
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/">Home</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" data-cy="profile-dropdown">
+              <div class="profile-pic-container me-2">
+                <img [src]="getProfilePicSrc(user)" class="rounded-circle" alt="">
+              </div>
+              <span>{{user.firstName ? user.firstName : 'User'}}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item cursor-pointer" (click)="showProfile()" data-cy="profile-link">Profile</a></li>
+              <li><hr class="dropdown-divider"/></li>
+              <li><a class="dropdown-item cursor-pointer" (click)="logout()">Log out</a></li>
+            </ul>
+          </li>
+        </ul>
+      }
     </div>
   </div>
 </nav>

@@ -9,14 +9,6 @@
   cursor: pointer;
 }
 
-.popover {
-  position: absolute;
-
-  .popover-arrow {
-    position: absolute;
-  }
-}
-
 .was-validated .ng-invalid~.invalid-feedback {
   display: block;
 }

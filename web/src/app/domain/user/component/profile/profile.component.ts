@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, effect, signal} from '@angular/core';
 import {BsModalRef} from 'ngx-bootstrap/modal';
 import {UserService} from '../../user.service';
-import {User} from '../../model/user';
 import {UpdateUserRequest} from '../../model/update-user-request';
 import {FormsModule, NgForm} from '@angular/forms';
 import {FileUtils, TmBootstrapModule} from '@tommeijer/tm-bootstrap';
 import {PopoverDirective} from "ngx-bootstrap/popover";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-profile',
@@ -17,59 +17,56 @@ import {PopoverDirective} from "ngx-bootstrap/popover";
   ],
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  public user: User;
+export class ProfileComponent {
+  public user = toSignal(this.userService.user$);
   public request: UpdateUserRequest = {};
-  public formChanged = false;
-  public wasValidated = false;
-  public isSubmitting = false;
-  public isDeleting = false;
+  public formChanged = signal(false);
+  public wasValidated = signal(false);
+  public isSubmitting = signal(false);
+  public isDeleting = signal(false);
 
   constructor(public modalRef: BsModalRef,
               private readonly userService: UserService) {
-  }
-
-  ngOnInit(): void {
-    this.userService.user$.subscribe(user => {
-      this.user = user;
-      if (this.user) {
-        this.request.firstName = this.user.firstName;
-        this.request.lastName = this.user.lastName;
-        if (this.user.profilePic) {
-          this.request.profilePic = FileUtils.base64ToFile(this.user.profilePic.content, this.user.profilePic.type, this.user.profilePic.name);
+    effect(() => {
+      const user = this.user();
+      if (user) {
+        this.request.firstName = user.firstName;
+        this.request.lastName = user.lastName;
+        if (user.profilePic) {
+          this.request.profilePic = FileUtils.base64ToFile(user.profilePic.content, user.profilePic.type, user.profilePic.name);
         }
       }
     });
   }
 
   public updateUser(form: NgForm): void {
-    this.wasValidated = !form.valid;
-    if (!form.valid || this.isSubmitting || !this.formChanged) {
+    this.wasValidated.set(!form.valid);
+    if (!form.valid || this.isSubmitting() || !this.formChanged()) {
       return;
     }
-    this.isSubmitting = true;
-    this.userService.update(this.request).subscribe(
-      () => {
-        this.isSubmitting = false;
+    this.isSubmitting.set(true);
+    this.userService.update(this.request).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
         this.userService.get();
         this.modalRef.hide();
       },
-      () => this.isSubmitting = false
-    );
+      error: () => this.isSubmitting.set(false)
+    });
   }
 
   public deleteUser(): void {
-    if (this.isDeleting) {
+    if (this.isDeleting()) {
       return;
     }
-    this.isDeleting = true;
-    this.userService.delete().subscribe(
-      () => {
-        this.isDeleting = false;
+    this.isDeleting.set(true);
+    this.userService.delete().subscribe({
+      next: () => {
+        this.isDeleting.set(false);
         this.modalRef.hide();
         this.userService.logout();
       },
-      () => this.isDeleting = false
-    );
+      error: () => this.isDeleting.set(false)
+    });
   }
 }

@@ -1,4 +1,4 @@
-import {ApplicationConfig, importProvidersFrom} from '@angular/core';
+import {ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
@@ -9,6 +9,7 @@ import {ModalModule} from "ngx-bootstrap/modal";
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideRouter(routes),
     {provide: 'apiUrl', useValue: environment.apiUrl},
     provideHttpClient(withInterceptorsFromDi()),

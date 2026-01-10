@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {UserService} from '../../domain/user/user.service';
 import {Router, RouterLink} from '@angular/router';
@@ -22,8 +22,8 @@ import {RepeatedPasswordValidatorDirective} from "../../validator/repeated-passw
 export class RegisterComponent {
   public request: RegisterUserRequest = {};
   public repeatPassword: string;
-  public wasValidated = false;
-  public isSubmitting = false;
+  public wasValidated = signal(false);
+  public isSubmitting = signal(false);
 
   constructor(private readonly userService: UserService,
               private readonly alertService: AlertService,
@@ -32,19 +32,19 @@ export class RegisterComponent {
   }
 
   public register(form: NgForm): void {
-    this.wasValidated = !form.valid;
-    if (!form.valid || this.isSubmitting) {
+    this.wasValidated.set(!form.valid);
+    if (!form.valid || this.isSubmitting()) {
       return;
     }
-    this.isSubmitting = true;
-    this.userService.register(this.request).subscribe(
-      (response) => {
-        this.isSubmitting = false;
+    this.isSubmitting.set(true);
+    this.userService.register(this.request).subscribe({
+      next: (response) => {
+        this.isSubmitting.set(false);
         this.alertService.clear();
         this.authService.saveAuth(response.accessToken, response.refreshToken, true);
         this.router.navigateByUrl('/home');
       },
-      () => this.isSubmitting = false
-    );
+      error: () => this.isSubmitting.set(false)
+    });
   }
 }

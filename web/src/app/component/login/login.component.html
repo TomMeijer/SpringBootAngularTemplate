@@ -6,7 +6,7 @@
       <div class="text-muted">Enter credentials below</div>
     </div>
     <form class="login-form"
-          [class.was-validated]="wasValidated"
+          [class.was-validated]="wasValidated()"
           #form="ngForm"
           (ngSubmit)="login(form)"
     >
@@ -39,7 +39,7 @@
                            btnType="submit"
                            icon="bi bi-arrow-right-circle"
                            text="Log in"
-                           [spin]="isSubmitting"
+                           [spin]="isSubmitting()"
         ></tm-spinner-button>
       </div>
     </form>

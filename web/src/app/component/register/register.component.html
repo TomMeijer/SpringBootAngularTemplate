@@ -6,7 +6,7 @@
       <div class="text-muted">Enter information below</div>
     </div>
     <form class="register-form"
-          [class.was-validated]="wasValidated"
+          [class.was-validated]="wasValidated()"
           #form="ngForm"
           (ngSubmit)="register(form)"
     >
@@ -64,7 +64,7 @@
                            btnType="submit"
                            icon="bi bi-arrow-right-circle"
                            text="Register"
-                           [spin]="isSubmitting"
+                           [spin]="isSubmitting()"
         ></tm-spinner-button>
       </div>
     </form>
