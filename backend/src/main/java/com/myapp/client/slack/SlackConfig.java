@@ -4,9 +4,11 @@ import com.tommeijer.javalib.http.BearerAuthInterceptor;
 import com.tommeijer.javalib.http.DefaultHttpClient;
 import com.tommeijer.javalib.http.HttpClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import java.util.ArrayList;
 
 @Configuration
 public class SlackConfig {
@@ -20,10 +22,13 @@ public class SlackConfig {
 
     @Bean
     public HttpClient slackHttpClient() {
-        var restTemplate = new RestTemplateBuilder()
-                .rootUri(BASE_URL)
-                .interceptors(new BearerAuthInterceptor(() -> token))
-                .build();
+        var restTemplate = new RestTemplate();
+        restTemplate.setUriTemplateHandler(new org.springframework.web.util.DefaultUriBuilderFactory(BASE_URL));
+        
+        var interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+        interceptors.add(new BearerAuthInterceptor(() -> token));
+        restTemplate.setInterceptors(interceptors);
+        
         return new DefaultHttpClient(restTemplate);
     }
 }
