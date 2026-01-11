@@ -12,6 +12,7 @@
     >
       <div class="mb-3">
         <tm-input name="firstName"
+                  data-cy="first-name"
                   placeholder="First name (optional)"
                   [(ngModel)]="request.firstName"
                   prependIcon="bi bi-person"
@@ -19,6 +20,7 @@
       </div>
       <div class="mb-3">
         <tm-input name="lastName"
+                  data-cy="last-name"
                   placeholder="Last name (optional)"
                   [(ngModel)]="request.lastName"
                   prependIcon="bi bi-person"
@@ -27,6 +29,7 @@
       <div class="mb-3">
         <tm-input type="email"
                   name="email"
+                  data-cy="email"
                   placeholder="Email"
                   [(ngModel)]="request.email"
                   [required]="true"
@@ -36,6 +39,7 @@
       <div class="mb-3">
         <tm-input type="password"
                   name="password"
+                  data-cy="password"
                   placeholder="Password"
                   [(ngModel)]="request.password"
                   [required]="true"
@@ -48,6 +52,7 @@
         <input #repeatPasswordInput="ngModel"
                type="password"
                name="repeatPassword"
+               data-cy="repeat-password"
                class="form-control"
                [(ngModel)]="repeatPassword"
                required
@@ -56,11 +61,12 @@
                [password]="request.password"
         >
         @if (repeatPasswordInput.errors?.message) {
-          <div class="invalid-feedback">{{repeatPasswordInput.errors.message}}</div>
+          <div class="invalid-feedback" data-cy="repeat-password-error">{{repeatPasswordInput.errors.message}}</div>
         }
       </div>
       <div class="mb-3">
         <tm-spinner-button className="btn-success w-100"
+                           data-cy="register-button"
                            btnType="submit"
                            icon="bi bi-arrow-right-circle"
                            text="Register"
@@ -72,7 +78,7 @@
       <span>Already have an account?</span>
     </div>
     <div class="d-grid">
-      <a routerLink="/login" class="btn btn-light btn-block">Log in</a>
+      <a routerLink="/login" data-cy="login-link" class="btn btn-light btn-block">Log in</a>
     </div>
   </div>
 </div>

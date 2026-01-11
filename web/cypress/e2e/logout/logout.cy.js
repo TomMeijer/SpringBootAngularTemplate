@@ -10,7 +10,7 @@ context('Logout', () => {
     cy.get('[data-cy=profile-dropdown]').click()
 
     // Click the Log out link
-    cy.contains('a', 'Log out').click()
+    cy.get('[data-cy=logout-link]').click()
 
     // Verify that tokens are removed from storage
     cy.window().then((win) => {

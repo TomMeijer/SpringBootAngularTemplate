@@ -27,6 +27,7 @@
                 name="firstName"
                 label="First name (optional)"
                 [(ngModel)]="request.firstName"
+                data-cy="first-name-input"
       ></tm-input>
     </div>
     <div class="mb-3">
@@ -34,6 +35,7 @@
                 name="lastName"
                 label="Last name (optional)"
                 [(ngModel)]="request.lastName"
+                data-cy="last-name-input"
       ></tm-input>
     </div>
     <div class="mb-3">
@@ -42,10 +44,11 @@
                 label="Email address"
                 [ngModel]="user()?.email"
                 [readOnly]="true"
+                data-cy="email-input"
       ></tm-input>
     </div>
     <div class="d-flex justify-content-between position-relative">
-      <tm-save-button [changed]="formChanged()" [submitting]="isSubmitting()" data-cy="profile-save-btn"></tm-save-button>
+      <tm-save-button [changed]="formChanged()" [submitting]="isSubmitting()" data-cy="save-button"></tm-save-button>
       <tm-spinner-button className="btn-danger"
                          icon="bi bi-trash"
                          text="Delete account"
@@ -54,12 +57,13 @@
                          placement="bottom"
                          [outsideClick]="true"
                          #deletePopover="bs-popover"
+                         data-cy="delete-account-button"
       ></tm-spinner-button>
       <ng-template #deleteConfirmDialog>
         <div class="mb-3">Are you sure you want to permanently delete your account?</div>
         <div class="d-flex">
-          <button type="button" class="btn btn-sm btn-success me-1 flex-grow-1" (click)="deletePopover.hide(); deleteUser()">Confirm</button>
-          <button type="button" class="btn btn-sm btn-danger ms-1 flex-grow-1" (click)="deletePopover.hide()">Cancel</button>
+          <button type="button" class="btn btn-sm btn-success me-1 flex-grow-1" (click)="deletePopover.hide(); deleteUser()" data-cy="confirm-delete-button">Confirm</button>
+          <button type="button" class="btn btn-sm btn-danger ms-1 flex-grow-1" (click)="deletePopover.hide()" data-cy="cancel-delete-button">Cancel</button>
         </div>
       </ng-template>
     </div>

@@ -13,6 +13,7 @@
       <div class="mb-3">
         <tm-input type="email"
                   name="email"
+                  data-cy="email"
                   placeholder="Email"
                   [(ngModel)]="email"
                   [required]="true"
@@ -22,6 +23,7 @@
       <div class="mb-3">
         <tm-input type="password"
                   name="password"
+                  data-cy="password"
                   placeholder="Password"
                   [(ngModel)]="password"
                   [required]="true"
@@ -30,12 +32,14 @@
       </div>
       <div class="mb-3">
         <tm-checkbox name="rememberMe"
+                     data-cy="remember-me"
                      label="Remember me"
                      [(ngModel)]="rememberMe"
         ></tm-checkbox>
       </div>
       <div class="mb-3">
         <tm-spinner-button className="btn-primary w-100"
+                           data-cy="login-button"
                            btnType="submit"
                            icon="bi bi-arrow-right-circle"
                            text="Log in"
@@ -47,7 +51,7 @@
       <span>Don't have an account?</span>
     </div>
     <div class="d-grid">
-      <a routerLink="/register" class="btn btn-light btn-block">Register</a>
+      <a routerLink="/register" data-cy="register-link" class="btn btn-light btn-block">Register</a>
     </div>
   </div>
 </div>

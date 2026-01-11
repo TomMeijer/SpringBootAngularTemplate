@@ -11,9 +11,9 @@ context('Login', () => {
     cy.intercept('POST', '**/auth', { fixture: 'auth.json' }).as('loginRequest');
     cy.intercept('GET', '**/user', { fixture: 'user.json' }).as('getUser');
 
-    cy.get('[name=email] input').type('test@example.com')
-    cy.get('[name=password] input').type('Password123!')
-    cy.get('button[type=submit]').click()
+    cy.get('[data-cy=email] input').type('test@example.com')
+    cy.get('[data-cy=password] input').type('Password123!')
+    cy.get('[data-cy=login-button] button').click()
 
     cy.wait('@loginRequest').then(interceptor => {
       expect(interceptor.request.body).to.deep.equal({
@@ -34,11 +34,11 @@ context('Login', () => {
     cy.intercept('POST', '**/auth', { fixture: 'auth.json' }).as('loginRequest');
     cy.intercept('GET', '/user', { fixture: 'user.json' }).as('getUser');
 
-    cy.get('[name=email] input').type('test@example.com')
-    cy.get('[name=password] input').type('Password123!')
+    cy.get('[data-cy=email] input').type('test@example.com')
+    cy.get('[data-cy=password] input').type('Password123!')
     // Uncheck remember me (it's checked by default in the component)
-    cy.get('[name=rememberMe] input').uncheck({force: true})
-    cy.get('button[type=submit]').click()
+    cy.get('[data-cy=remember-me] input').uncheck({force: true})
+    cy.get('[data-cy=login-button] button').click()
 
     cy.wait('@loginRequest')
     cy.url().should('include', '/home')
@@ -56,19 +56,19 @@ context('Login', () => {
       body: { message: 'Unauthorized' }
     }).as('loginRequest');
 
-    cy.get('[name=email] input').type('test@example.com')
-    cy.get('[name=password] input').type('wrong-password')
-    cy.get('button[type=submit]').click()
+    cy.get('[data-cy=email] input').type('test@example.com')
+    cy.get('[data-cy=password] input').type('wrong-password')
+    cy.get('[data-cy=login-button] button').click()
 
     cy.wait('@loginRequest')
 
     // Check if submitting state is cleared (button enabled or spinner gone)
     // In the component, error handler sets isSubmitting to false
-    cy.get('button[type=submit]').should('not.be.disabled')
+    cy.get('[data-cy=login-button] button').should('not.be.disabled')
   })
 
   it('shows validation errors when fields are empty', () => {
-    cy.get('button[type=submit]').click()
+    cy.get('[data-cy=login-button] button').click()
 
     // The form gets 'was-validated' class which shows bootstrap validation
     cy.get('form.was-validated').should('exist')
@@ -80,7 +80,7 @@ context('Login', () => {
   })
 
   it('can navigate to register page', () => {
-    cy.contains('a', 'Register').click()
+    cy.get('[data-cy=register-link]').click()
     cy.url().should('include', '/register')
   })
 })

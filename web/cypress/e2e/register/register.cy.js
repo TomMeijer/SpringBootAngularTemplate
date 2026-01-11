@@ -11,12 +11,12 @@ context('Register', () => {
     cy.intercept('POST', '**/user', { fixture: 'auth.json' }).as('registerUser');
     cy.intercept('GET', '**/user', { fixture: 'user.json' }).as('getUser');
 
-    cy.get('[name=firstName] input').type('John')
-    cy.get('[name=lastName] input').type('Doe')
-    cy.get('[name=email] input').type('john.doe@example.com')
-    cy.get('[name=password] input').type('Password123!')
-    cy.get('input[name=repeatPassword]').type('Password123!')
-    cy.get('button[type=submit]').click()
+    cy.get('[data-cy=first-name] input').type('John')
+    cy.get('[data-cy=last-name] input').type('Doe')
+    cy.get('[data-cy=email] input').type('john.doe@example.com')
+    cy.get('[data-cy=password] input').type('Password123!')
+    cy.get('[data-cy=repeat-password]').type('Password123!')
+    cy.get('[data-cy=register-button] button').click()
 
     cy.wait('@registerUser').then(interceptor => {
       expect(interceptor.request.body).to.deep.equal({
@@ -36,9 +36,9 @@ context('Register', () => {
   })
 
   it('shows error when passwords do not match', () => {
-    cy.get('[name=password] input').type('Password123!')
-    cy.get('input[name=repeatPassword]').type('Password456!')
-    cy.get('button[type=submit]').click()
-    cy.get('.invalid-feedback').should('be.visible').and('contain', 'Repeated password does not match')
+    cy.get('[data-cy=password] input').type('Password123!')
+    cy.get('[data-cy=repeat-password]').type('Password456!')
+    cy.get('[data-cy=register-button] button').click()
+    cy.get('[data-cy=repeat-password-error]').should('be.visible').and('contain', 'Repeated password does not match')
   })
 })
