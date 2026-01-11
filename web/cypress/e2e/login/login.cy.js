@@ -8,8 +8,8 @@ context('Login', () => {
   })
 
   it('can login with valid credentials', () => {
-    cy.intercept('GET', '**/user', { fixture: 'user.json' }).as('getUser');
     cy.intercept('POST', '**/auth', { fixture: 'auth.json' }).as('loginRequest');
+    cy.intercept('GET', '**/user', { fixture: 'user.json' }).as('getUser');
 
     cy.get('[name=email] input').type('test@example.com')
     cy.get('[name=password] input').type('Password123!')
@@ -21,10 +21,7 @@ context('Login', () => {
         password: 'Password123!'
       })
     })
-    cy.wait('@getUser')
-
     cy.url().should('include', '/home')
-
     cy.fixture('auth.json').then((auth) => {
       cy.window().then((win) => {
         expect(win.localStorage.getItem('tm-access-token')).to.equal(auth.accessToken)
@@ -34,21 +31,17 @@ context('Login', () => {
   })
 
   it('can login with remember me unchecked', () => {
-    cy.intercept('GET', '/user', { fixture: 'user.json' }).as('getUser');
     cy.intercept('POST', '**/auth', { fixture: 'auth.json' }).as('loginRequest');
+    cy.intercept('GET', '/user', { fixture: 'user.json' }).as('getUser');
 
     cy.get('[name=email] input').type('test@example.com')
     cy.get('[name=password] input').type('Password123!')
-
     // Uncheck remember me (it's checked by default in the component)
     cy.get('[name=rememberMe] input').uncheck({force: true})
-
     cy.get('button[type=submit]').click()
 
     cy.wait('@loginRequest')
-    cy.wait('@getUser')
     cy.url().should('include', '/home')
-
     cy.fixture('auth.json').then((auth) => {
       cy.window().then((win) => {
         expect(win.sessionStorage.getItem('tm-access-token')).to.equal(auth.accessToken)
